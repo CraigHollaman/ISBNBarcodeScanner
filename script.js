@@ -25,14 +25,16 @@ const upsert = (array, item) => { // (1)
   else array.push(item)
 }
 
+
 const renderBook = async () => {
   const book = await getBook()
   const tbodyRef = document.getElementById('bookTable').getElementsByTagName('tbody')[0]
   if (book.items.length > 0) {
+    const author = book.items[0].volumeInfo.authors === undefined ? 'Unknown' : book.items[0].volumeInfo.authors
     bookObj = {
       Title: book.items[0].volumeInfo.title,
       ISBN: document.getElementById('isbn_number').value,
-      Author: book.items[0].volumeInfo.authors[0],
+      Author: author,
       Count: 1
     }
     upsert(bookArray, bookObj)
@@ -71,7 +73,7 @@ const exportTableToCsv = (html, filename) => {
 
   for (let i = 0; i < rows.length; i++) {
     const row = []; const cols = rows[i].querySelectorAll('td, th')
-    for (let j = 0; j < 5; j++) { row.push(cols[j].innerText) }
+    for (let j = 0; j < 4; j++) { row.push(cols[j].innerText) }
     csv.push(row.join(','))
   }
   downloadCsv(csv.join('\n'), filename)
